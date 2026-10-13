@@ -1,3 +1,8 @@
+--[[
+    EVIL SCRIPTS HUB // JOKER PROTECTED
+    Owner: Evil Scripts Team
+--]]
+
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -73,7 +78,7 @@ Title.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseBtn = Instance.new("TextButton", TitleBar)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(210, 45, 45)
-CloseBtn.Position = UDim2.new(0.92, 0, 0.12, 0)
+CloseBtn.Position = UDim2.new(0.88, 0, 0.12, 0)
 CloseBtn.Size = UDim2.new(0, 28, 0, 28)
 CloseBtn.Font = Enum.Font.SourceSansBold
 CloseBtn.Text = "X"
@@ -308,7 +313,7 @@ KeyBtn.MouseButton1Click:Connect(function()
 end)
 
 ----------------------------------------------------
--- PESTAÑA: JUGADORES (TELEPORT POR NOMBRE DE USUARIO)
+-- PESTAÑA: JUGADORES
 ----------------------------------------------------
 AddTitleHeader(TabJugadores, "Teleport por Username")
 

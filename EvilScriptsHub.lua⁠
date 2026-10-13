@@ -1,9 +1,7 @@
 --[[
-    EVIL SCRIPTS HUB // JOKER PROTECTED
-    Owner: Evil Scripts Team
+    EVIL SCRIPTS HUB // DELTA EXECUTOR READY
 --]]
 
-local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -26,7 +24,7 @@ ScreenGui.Name = "EvilScriptsTabbed"
 ScreenGui.ResetOnSpawn = false
 pcall(function() ScreenGui.Parent = parentGui end)
 
--- Botón Flotante "7"
+-- Botón Flotante
 local FloatingBtn = Instance.new("TextButton", ScreenGui)
 FloatingBtn.Name = "FloatingBtn"
 FloatingBtn.BackgroundColor3 = Color3.fromRGB(18, 22, 36)
@@ -78,7 +76,7 @@ Title.TextXAlignment = Enum.TextXAlignment.Left
 
 local CloseBtn = Instance.new("TextButton", TitleBar)
 CloseBtn.BackgroundColor3 = Color3.fromRGB(210, 45, 45)
-CloseBtn.Position = UDim2.new(0.88, 0, 0.12, 0)
+CloseBtn.Position = UDim2.new(0.91, 0, 0.12, 0)
 CloseBtn.Size = UDim2.new(0, 28, 0, 28)
 CloseBtn.Font = Enum.Font.SourceSansBold
 CloseBtn.Text = "X"
@@ -153,11 +151,13 @@ local function CreateTab(tabName, requiresKey)
     
     TabBtn.MouseButton1Click:Connect(function()
         if requiresKey and not isKeyUnlocked then
-            game:GetService("StarterGui"):SetCore("SendNotification", {
-                Title = "Acceso Denegado",
-                Text = "Ingresa la Key en la pestaña Principal para desbloquear.",
-                Duration = 3
-            })
+            pcall(function()
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Acceso Denegado",
+                    Text = "Ingresa la Key en la pestaña Principal.",
+                    Duration = 3
+                })
+            end)
             return
         end
         
@@ -220,7 +220,7 @@ TabButtons[1].BackgroundColor3 = Color3.fromRGB(0, 120, 235)
 TabButtons[1].TextColor3 = Color3.fromRGB(255, 255, 255)
 
 ----------------------------------------------------
--- PESTAÑA PRINCIPAL (KEY Y WHATSAPP)
+-- PESTAÑA PRINCIPAL
 ----------------------------------------------------
 
 local KeySection = Instance.new("Frame", TabPrincipal)
@@ -249,14 +249,14 @@ CopyWpBtn.TextSize = 14
 Instance.new("UICorner", CopyWpBtn).CornerRadius = UDim.new(0, 6)
 
 CopyWpBtn.MouseButton1Click:Connect(function()
+    pcall(function() setclipboard(WHATSAPP_LINK) end)
     pcall(function()
-        setclipboard(WHATSAPP_LINK)
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Enlace Copiado",
+            Text = "Link copiado al portapapeles.",
+            Duration = 3
+        })
     end)
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Enlace Copiado",
-        Text = "El link del canal de WhatsApp se copió al portapapeles.",
-        Duration = 3
-    })
 end)
 
 local KeyBox = Instance.new("TextBox", KeySection)
@@ -301,13 +301,15 @@ KeyBtn.MouseButton1Click:Connect(function()
         isKeyUnlocked = true
         KeySection.Visible = false
         WelcomeSuccessLabel.Visible = true
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "Acceso Concedido",
-            Text = "¡Key correcta! Todas las opciones han sido desbloqueadas.",
-            Duration = 4
-        })
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "Acceso Concedido",
+                Text = "¡Key correcta!",
+                Duration = 4
+            })
+        end)
     else
-        StatusLabel.Text = "Key incorrecta. Revisa el canal de WhatsApp."
+        StatusLabel.Text = "Key incorrecta."
         StatusLabel.TextColor3 = Color3.fromRGB(255, 80, 80)
     end
 end)
@@ -355,18 +357,7 @@ TpUserBtn.MouseButton1Click:Connect(function()
         local myChar = player.Character
         if myChar and myChar:FindFirstChild("HumanoidRootPart") then
             myChar.HumanoidRootPart.CFrame = foundPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 2, 0)
-            game:GetService("StarterGui"):SetCore("SendNotification", {
-                Title = "Teleport Exitoso",
-                Text = "Te has teleportado a " .. foundPlayer.Name,
-                Duration = 3
-            })
         end
-    else
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "Jugador no encontrado",
-            Text = "No se encontró ningún usuario con ese nombre.",
-            Duration = 3
-        })
     end
 end)
 
@@ -397,27 +388,6 @@ AddActionBtn(TabJugadores, "Ver Jugadores en el Bosque (ESP)", function()
         if p ~= player and p.Character and not p.Character:FindFirstChild("Highlight") then
             local hl = Instance.new("Highlight", p.Character)
             hl.FillColor = Color3.fromRGB(0, 170, 255)
-        end
-    end
-end)
-
-AddActionBtn(TabJugadores, "Teleport al Jugador más Cercano", function()
-    local char = player.Character
-    if char and char:FindFirstChild("HumanoidRootPart") then
-        local myPos = char.HumanoidRootPart.Position
-        local target = nil
-        local dist = math.huge
-        for _, p in pairs(Players:GetPlayers()) do
-            if p ~= player and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                local d = (p.Character.HumanoidRootPart.Position - myPos).Magnitude
-                if d < dist then
-                    dist = d
-                    target = p.Character.HumanoidRootPart
-                end
-            end
-        end
-        if target then
-            char.HumanoidRootPart.CFrame = target.CFrame + Vector3.new(0, 2, 0)
         end
     end
 end)
@@ -535,24 +505,14 @@ AddActionBtn(TabJuegos, "Anti-AFK Automático", function()
 end)
 
 ----------------------------------------------------
--- ANIMACIONES DE APERTURA
+-- ABRIR INTERFAZ AUTOMÁTICAMENTE
 ----------------------------------------------------
-local function AnimateOpen()
-    MainFrame.Visible = true
-    MainFrame.Size = UDim2.new(0, 0, 0, 0)
-    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out)
-    local tween = TweenService:Create(MainFrame, tweenInfo, {Size = UDim2.new(0, 520, 0, 320)})
-    tween:Play()
-end
+MainFrame.Visible = true
 
 CloseBtn.MouseButton1Click:Connect(function()
     MainFrame.Visible = false
 end)
 
 FloatingBtn.MouseButton1Click:Connect(function()
-    if not MainFrame.Visible then
-        AnimateOpen()
-    else
-        MainFrame.Visible = false
-    end
+    MainFrame.Visible = not MainFrame.Visible
 end)
